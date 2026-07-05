@@ -1,0 +1,25 @@
+services:
+  server:
+    build: ./server
+    ports:
+      - "3001:3001"
+    environment:
+      PORT: 3001
+    restart: unless-stopped
+
+  client:
+    build:
+      context: ./client
+      args:
+        VITE_FIREBASE_API_KEY: ${VITE_FIREBASE_API_KEY}
+        VITE_FIREBASE_AUTH_DOMAIN: ${VITE_FIREBASE_AUTH_DOMAIN}
+        VITE_FIREBASE_PROJECT_ID: ${VITE_FIREBASE_PROJECT_ID}
+        VITE_FIREBASE_STORAGE_BUCKET: ${VITE_FIREBASE_STORAGE_BUCKET}
+        VITE_FIREBASE_MESSAGING_SENDER_ID: ${VITE_FIREBASE_MESSAGING_SENDER_ID}
+        VITE_FIREBASE_APP_ID: ${VITE_FIREBASE_APP_ID}
+        VITE_WS_URL: ${VITE_WS_URL:-ws://localhost:3001}
+    ports:
+      - "80:80"
+    depends_on:
+      - server
+    restart: unless-stopped
